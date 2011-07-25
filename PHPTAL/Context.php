@@ -147,11 +147,16 @@ class PHPTAL_Context
      * Activate or deactivate exception throwing during unknown path
      * resolution.
      *
-     * @return void
+     * @return boolean old value or current if $bool argument is null
      */
-    public function noThrow($bool)
+    public function noThrow($bool = null)
     {
-        $this->_nothrow = $bool;
+    	$oldValue = $this->_nothrow;
+    	if ($bool !== null)
+    	{
+	        $this->_nothrow = ($bool == true);
+	    }
+	    return $oldValue;
     }
 
     /**
