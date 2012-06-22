@@ -186,6 +186,13 @@ class PHPTAL_Php_State
         return $this->_interpolateTalesVarsCallback($matches, 'cdata');
     }
 
+    private static $structuredTales = false;
+    
+    public static function setStructuredTales($structured = true)
+    {
+    	self::$structuredTales = ($structured == true);
+    }
+    
     private function _interpolateTalesVarsCallback($matches, $format)
     {
         // replaces $${ with literal ${ (or $$$${ with $${ etc)
@@ -203,7 +210,8 @@ class PHPTAL_Php_State
 
         $code = $this->compileTalesToPHPExpression($code);
 
-        if (rtrim($matches[2]) == 'structure') { // regex captures a space there
+        if (self::$structuredTales || rtrim($matches[2]) == 'structure') { // regex captures a space there
+        	self::$structuredTales = false;
             return $dollars.'<?php echo '.$this->stringify($code)." ?>\n";
         } else {
             if ($format == 'html') {
